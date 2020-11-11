@@ -1,12 +1,15 @@
+const User = require('../models/User')
+
 exports.login = function() {
 
 }
 
-exports.logut = function() {
+exports.logout = function() {
     
 }
 
 exports.register = function(req, res) {
+    console.log(req.body)
     res.send("Thanks for trying to register.")
 }
 
