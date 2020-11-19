@@ -2,8 +2,12 @@ const { render } = require('ejs')
 const e = require('express')
 const User = require('../models/User')
 
-exports.login = function() {
-
+exports.login = function(req, res) {
+    let user = new User(req.body)
+    user.login(function(result) {
+        res.send(result)
+    })
+    
 }
 
 exports.logout = function() {
