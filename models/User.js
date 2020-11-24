@@ -30,26 +30,35 @@ User.prototype.validate = function() {
     if (this.data.username.length > 30) {this.errors.push("Username cannot exceed 30 characters.")}
 }
 
-User.prototype.login = function(callback) {
-    this.sanitize()
-    usersCollection.findOne({username: this.data.username}, (err, attemptedUser) => {
-        if (attemptedUser && attemptedUser.password == this.data.password) {
-            callback("Congrats")
-        } else {
-            callback("Invalid login")
-        }
+User.prototype.login = function() {
+    return new Promise((resolve, reject) => {
+        this.sanitize()
+        usersCollection.findOne({username: this.data.username}).then((attemptedUser) => {
+            if (attemptedUser && attemptedUser.password == this.data.password) {
+                resolve("Congrats")
+             } else {
+                reject("Invalid login")
+             }
+        }).catch(function() {
+            reject("Try again later")
+        })
     })
 }
 
 User.prototype.register = function() {
-    // Step 1: Validate user date.
-    this.sanitize()
-    this.validate()
+    return new Promise((resolve, reject) => {
+        // Step 1: Validate user date.
+        this.sanitize()
+        this.validate()
 
-    // Step 2: Only if there are no errors then save data in database.
-    if (!this.errors.length) {
-        usersCollection.insertOne(this.data)
-    }
+        // Step 2: Only if there are no errors then save data in database.
+        if (!this.errors.length) {
+            usersCollection.insertOne(this.data)
+            resolve("Registered")
+        } else {
+            reject(this.errors)
+        }
+    })
 }
 
 module.exports = User
