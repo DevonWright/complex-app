@@ -39,8 +39,8 @@ User.prototype.login = function() {
              } else {
                 reject("Invalid login")
              }
-        }).catch(function() {
-            reject("Try again later")
+        }).catch(function(e) {
+            reject("Try again later. Error Code: " + e)
         })
     })
 }
