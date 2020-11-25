@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs")
 const validator = require("validator")
-const usersCollection = require('../db').collection("users")
+const usersCollection = require('../db').db().collection("users")
 
 let User = function(data) {
     this.data = data
@@ -14,7 +14,7 @@ User.prototype.sanitize = function() {
 
     // Get rid of uneeded properties
     this.data = {
-        username: this.data.username.trim().toLowerCase(),
+        username: this.data.username.trim(),
         email: this.data.email.trim().toLowerCase(),
         password: this.data.password
     }
