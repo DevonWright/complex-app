@@ -29,7 +29,12 @@ exports.register = function(req, res) {
     user.register().then(function(result){
         res.send(result)
     }).catch(function(e) {
-        res.send(e)
+        e.forEach(function(error) {
+            req.flash('regErrors', error)
+        });
+        req.session.save(function() {
+            res.redirect('/')
+        })
     })
 }
 
@@ -37,6 +42,6 @@ exports.home = function(req, res) {
     if (req.session.user) {
         res.render('home-dashboard', {username: req.session.user.username})
     } else {
-        res.render('home-guest', {errors: req.flash('errors')})
+        res.render('home-guest', {errors: req.flash('errors'), regErrors: req.flash('regErrors')})
     }
 }
