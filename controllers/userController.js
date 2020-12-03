@@ -26,8 +26,11 @@ exports.logout = function(req, res) {
 
 exports.register = function(req, res) {
     let user = new User(req.body)
-    user.register().then(function(result){
-        res.send(result)
+    user.register().then(function(result) {
+        req.session.user = {username: result}
+        req.session.save(function() {
+            res.redirect('/')
+        })
     }).catch(function(e) {
         e.forEach(function(error) {
             req.flash('regErrors', error)
