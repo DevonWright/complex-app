@@ -55,7 +55,7 @@ User.prototype.login = function() {
             if (attemptedUser && bcrypt.compareSync(this.data.password, attemptedUser.password)) {
                 this.data = attemptedUser
                 this.getAvatar()
-                resolve("Congrats")
+                resolve(this.data.username)
              } else {
                 reject("Invalid login")
              }
