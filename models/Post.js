@@ -1,8 +1,10 @@
 const postsCollection = require('../db').db().collection("posts")
+const ObjectID = require('mongodb').ObjectID
 
-let Post = function(data) {
+let Post = function(data, userid) {
     this.data = data
     this.errors = []
+    this.userid = userid
 }
 
 Post.prototype.create = function() {
@@ -14,7 +16,7 @@ Post.prototype.create = function() {
             postsCollection.insertOne(this.data).then(() => {
                 resolve()
             }).catch(() => {
-                this.errors.push("Please try again later")
+                this.errors.push("Please try again later.")
                 reject(this.errors)
             })
         } else {
@@ -31,7 +33,8 @@ Post.prototype.sanitize = function() {
     this.data = {
         title: this.data.title.trim(),
         body: this.data.body.trim(),
-        createdDate: new Date()
+        createdDate: new Date(),
+        author: ObjectID(this.userid)
     }
 }
 
