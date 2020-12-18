@@ -3,9 +3,12 @@ const validator = require("validator")
 const usersCollection = require('../db').db().collection("users")
 const md5 = require('md5')
 
-let User = function(data) {
+let User = function(data, getAvatar) {
     this.data = data
     this.errors = []
+
+    if (getAvatar == undefined) {getAvatar = false}
+    if (getAvatar) {this.getAvatar()}
 }
 
 User.prototype.sanitize = function() {
